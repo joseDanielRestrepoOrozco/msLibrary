@@ -14,6 +14,9 @@ public class User {
     private String email;
     private String password;
 
+    public User() {
+    }
+
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
@@ -22,6 +25,10 @@ public class User {
 
     public String get_id() {
         return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public String getName() {
