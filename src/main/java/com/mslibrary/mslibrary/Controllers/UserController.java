@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @CrossOrigin
@@ -24,6 +26,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public User store(@RequestBody User newUser) {
+        newUser.setPassword(convertirSHA256(newUser.getPassword()));
         return this.theUserRepository.save(newUser);
     }
 
@@ -38,7 +41,7 @@ public class UserController {
         if (theActualUser != null) {
             theActualUser.setName(theNewUser.getName());
             theActualUser.setEmail(theNewUser.getEmail());
-            theActualUser.setPassword(theNewUser.getPassword());
+            theActualUser.setPassword(convertirSHA256(theNewUser.getPassword()));
             return this.theUserRepository.save(theActualUser);
         } else {
             return null;
@@ -52,6 +55,23 @@ public class UserController {
         if (theUser != null) {
             this.theUserRepository.delete(theUser);
         }
+    }
+
+    public String convertirSHA256(String password) {
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        }
+        catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+        byte[] hash = md.digest(password.getBytes());
+        StringBuffer sb = new StringBuffer();
+        for(byte b : hash) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
     }
 
 }
