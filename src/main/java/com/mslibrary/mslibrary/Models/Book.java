@@ -2,6 +2,7 @@ package com.mslibrary.mslibrary.Models;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -13,10 +14,10 @@ public class Book {
     private String name;
     private String genre;
     private int date;
+    @DBRef
+    private Author author;
 
-
-
-    public Book(String name,String genre, int date) {
+    public Book(String name, String genre, int date) {
         this.name = name;
         this.date = date;
         this.genre = genre;
@@ -48,5 +49,13 @@ public class Book {
 
     public void setDate(int date) {
         this.date = date;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 }
