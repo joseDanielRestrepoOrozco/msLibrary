@@ -10,7 +10,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/authors")
+@RequestMapping("/api/authors")
 public class AuthorController {
 
     @Autowired

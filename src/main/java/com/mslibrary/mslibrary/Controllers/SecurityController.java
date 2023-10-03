@@ -12,25 +12,26 @@ import java.io.IOException;
 
 @CrossOrigin
 @RestController
-@RequestMapping("security")
+@RequestMapping("/api/public/security")
 public class SecurityController {
 
     @Autowired
     private UserRepository theUserRepository;
 
     @Autowired
-    private JwtService jwtService;
+    private EncryptionService encryptionService;
 
     @Autowired
-    private EncryptionService encryptionService;
+    private JwtService jwtService;
 
     @PostMapping("login")
     public String login(@RequestBody User theUser, final HttpServletResponse response) throws IOException {
         String token = "";
         User actualUser = this.theUserRepository.getUserByEmail(theUser.getEmail());
-        if (actualUser != null && actualUser.getPassword().equals(encryptionService.convertirSHA256(theUser.getPassword()))){
+        if (actualUser != null
+                && actualUser.getPassword().equals(encryptionService.convertirSHA256(theUser.getPassword()))) {
             token = jwtService.generateToken(actualUser);
-        }else {
+        } else {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
         }
         return token;
